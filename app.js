@@ -1,20 +1,38 @@
 const express = require("express");
 const app = express();
-const data = require("./data.json");
+// const data = require("./data.json");
+
+const data = require("./job_data.json");
 
 
-data.forEach((p) => {
-    p.notice_period = Math.floor(Math.random() * 3);
-    p.rating = Math.floor(Math.random() * 10);
-    p.opening = Math.floor(Math.random() * 50);
-})
+// data.forEach((p) => {
+//     p.notice_period = Math.floor(Math.random() * 3);
+//     p.rating = Math.floor(Math.random() * 10);
+//     p.opening = Math.floor(Math.random() * 50);
+// })
 
 app.use(express.json());
 
 app.get("/", (req, res) => {
     res.send(data);
     res.end();
+});
+
+app.get("/jobs", (req, res) => {
+    res.send(data);
+    res.end();
 })
+
+app.get("/jobs/:city", (req, res) => {
+
+    const val = data.filter((p) => {
+        if(p.city === req.params.city)
+            return p;
+    })
+    res.send(val);
+});
+
+
 
 app.get("/jobs/:city/skills/:skill", (req, res) => {
     const temp = data.filter((p) => {
