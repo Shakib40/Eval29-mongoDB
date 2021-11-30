@@ -72,21 +72,21 @@ app.get("/jobs/:location",  (req, res) => {
     }
 });
 
-// app.get("/jobs/:city/skills/:skill", (req, res) => {
-//     const temp = data.filter((p) => {
-//         if(p.city === req.params.city)
-//             return p;
-//     })
-//     const data_send = temp.filter((p) => {
-//         if(p.skills === req.params.skill)
-//              return p;
-//     })
-//     if(data.length === 0){
-//         res.send("job not found");
-//     }
-//     else
-//         res.send(data_send);
-// })
+
+// Get All Jobs by location and skills
+app.get("/jobs/:city/skills/:skill",  (req, res) => {
+    try {
+        const val = data.filter((p) => {
+            if(p.city === req.params.city && p.skill === req.params.skill)
+                return p;
+        })
+        return res.status(201).send(val);
+
+    } 
+    catch (e) {  
+        return res.status(500).json({ message: e.message, status: "Failed" }); 
+    }
+});
 
 // Get All Jobs which have Work form home
 app.get("/jobs/work_from_home",  (req, res) => {
@@ -164,7 +164,7 @@ app.get("/jobs/rating",  (req, res) => {
 });
 
 // Get company which have most jobs opening
-app.get("/jobs/opening",  (req, res) => {
+app.get("/jobs/opening/",  (req, res) => {
     try {
         const val =  data.sort( 
             function(a, b) {
