@@ -1,78 +1,115 @@
 const express = require("express");
 const app = express();
-// const data = require("./data.json");
-
 const data = require("./job_data.json");
 
 
-// data.forEach((p) => {
-//     p.notice_period = Math.floor(Math.random() * 3);
-//     p.rating = Math.floor(Math.random() * 10);
-//     p.opening = Math.floor(Math.random() * 50);
-// })
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send(data);
-    res.end();
-});
-
-app.get("/jobs", (req, res) => {
-    res.send(data);
-    res.end();
-})
-
-app.get("/jobs/:city", (req, res) => {
-
-    const val = data.filter((p) => {
-        if(p.city === req.params.city)
-            return p;
-    })
-    res.send(val);
-});
-
-
-
-app.get("/jobs/:city/skills/:skill", (req, res) => {
-    const temp = data.filter((p) => {
-        if(p.city === req.params.city)
-            return p;
-    })
-    const data_send = temp.filter((p) => {
-        if(p.skills === req.params.skill)
-             return p;
-    })
-    if(data.length === 0){
-        res.send("job not found");
+// Get All Jobs
+app.get("/",  (req, res) => {
+    try {
+        return res.status(201).send(data);
+    } 
+    catch (e) {  
+        return res.status(500).json({ message: e.message, status: "Failed" }); 
     }
-    else
-        res.send(data_send);
-})
+});
 
-app.get("/jobs/wfh", (req, res) => {
-    const newData = data.filter((p) => {
-        if(p.wfh === true)
-            return p;
-    })
-    res.send(newData);
-})
+// Get All Jobs
+app.get("/jobs",  (req, res) => {
+    try {
+        return res.status(201).send(data);
+    } 
+    catch (e) {  
+        return res.status(500).json({ message: e.message, status: "Failed" }); 
+    }
+});
 
-app.get("/jobs/notice_period/:n", (req, res) => {
-    const newData = data.filter((p) => {
-        if(p.notice_period >= req.params.n)
-            return p;
-    })
-    res.send(newData);
-})
+// Get All Jobs by city
+app.get("/jobs/:city",  (req, res) => {
+    try {
+        const val = data.filter((p) => {
+            if(p.city === req.params.city)
+                return p;
+        })
+        return res.status(201).send(val);
 
-app.get("/jobs/rating/:n", (req, res) => {
-    const newData = data.filter((p) => {
-        if(p.rating >= req.params.n)
-            return p;
-    })
-    res.send(newData);
-})
+    } 
+    catch (e) {  
+        return res.status(500).json({ message: e.message, status: "Failed" }); 
+    }
+});
+
+
+// app.get("/jobs/:city/skills/:skill", (req, res) => {
+//     const temp = data.filter((p) => {
+//         if(p.city === req.params.city)
+//             return p;
+//     })
+//     const data_send = temp.filter((p) => {
+//         if(p.skills === req.params.skill)
+//              return p;
+//     })
+//     if(data.length === 0){
+//         res.send("job not found");
+//     }
+//     else
+//         res.send(data_send);
+// })
+
+// Get All Jobs which have Work form home
+app.get("/jobs/work_from_home",  (req, res) => {
+    try {
+        const val = data.filter((p) => {
+            if(p.work_from_home === true)
+                return p;
+        })
+        return res.status(201).send(val);
+
+    } 
+    catch (e) {  
+        return res.status(500).json({ message: e.message, status: "Failed" }); 
+    }
+});
+
+// app.get("/jobs/wfh", (req, res) => {
+//     const newData = data.filter((p) => {
+//         if(p.wfh === true)
+//             return p;
+//     })
+//     res.send(newData);
+// })
+
+// Get All Jobs which have notice_period n
+app.get("/jobs/notice_period/:n",  (req, res) => {
+    try {
+        const val = data.filter((p) => {
+            if(p.notice_period == req.params.n)
+                return p;
+        })
+        return res.status(201).send(val);
+
+    } 
+    catch (e) {  
+        return res.status(500).json({ message: e.message, status: "Failed" }); 
+    }
+});
+
+// Get All Jobs which have rating n
+app.get("/jobs/rating/:n",  (req, res) => {
+    try {
+        const val = data.filter((p) => {
+            if(p.rating == req.params.n)
+                return p;
+        })
+        return res.status(201).send(val);
+
+    } 
+    catch (e) {  
+        return res.status(500).json({ message: e.message, status: "Failed" }); 
+    }
+});
 
 
 app.get("/jobs/company_details/:company_name", (req, res) => {
